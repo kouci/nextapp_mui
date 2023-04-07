@@ -1,15 +1,12 @@
 import { useEffect } from "react";
-import { ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider } from "@emotion/react";
 import createCache from "@emotion/cache";
-import { ServerStyleSheets } from '@mui/styles';
-import theme from "../theme/theme"
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
   const cache = createCache({ key: "css", prepend: true });
-  const sheets = new ServerStyleSheets();
 
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -19,14 +16,14 @@ export default function MyApp(props) {
     }
   }, []);
 
+  const theme = createTheme(); // Créez votre thème ici
+
   return (
     <CacheProvider value={cache}>
-      {sheets.collect(
-        <ThemeProvider theme={theme} >
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      )}
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </ThemeProvider>
     </CacheProvider>
   );
 }
